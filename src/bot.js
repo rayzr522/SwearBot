@@ -12,12 +12,12 @@ const letterTransforms = {
 
 const invisichars = [
     '\u200b',
-    '\u00a0',
     '\u200e',
     '\u202a'
 ].join('');
 
 const config = bot.config = require('./config.json');
+const whitelist = bot.whitelist = require('./whitelist.json');
 
 var words = bot.words = transformWordList(require('./words.json'));
 var commands = bot.commands = {};
@@ -99,6 +99,10 @@ bot.on('message', (msg) => {
     var changed = false;
 
     var content = msg.content;
+
+    whitelist.forEach(word => {
+        content = replaceAll(content, word, '\u00a0' + word.split('').join('\u00a0') + '\u00a0');
+    });
 
     for (const word in words) {
         var modified = replaceAll(content, words[word].regex, words[word].replacement);
