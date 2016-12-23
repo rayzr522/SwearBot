@@ -10,6 +10,13 @@ const letterTransforms = {
     l: ['1', '7']
 };
 
+const invisichars = [
+    '\u200b',
+    '\u00a0',
+    '\u200e',
+    '\u202a'
+].join('');
+
 const config = bot.config = require('./config.json');
 
 var words = bot.words = transformWordList(require('./words.json'));
@@ -71,7 +78,7 @@ function applyLetterTransforms(word) {
 
 function regexFromWord(word) {
     return new RegExp(
-        applyLetterTransforms(word.split('').join('[ \u200b\u00a0$@#^*._-]*'))
+        applyLetterTransforms(word.split('').join(`[ ${invisichars}$@#^*._-]*`))
     );
 }
 
