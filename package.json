@@ -7,7 +7,8 @@
   "author": "Rayzr",
   "license": "MIT",
   "scripts": {
-    "start": "gulp"
+    "start": "gulp",
+    "background": "screen -dmS swearBot gulp"
   },
   "devDependencies": {
     "eslint": "^3.12.0",
