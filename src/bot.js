@@ -4,10 +4,11 @@ const fs = require('fs');
 
 const letterTransforms = {
     e: ['3'],
-    i: ['1', '7'],
+    i: ['1', '7', '3'],
     a: ['8', '7', '@', '#'],
     o: ['0', '@'],
-    l: ['1', '7']
+    l: ['1', '7'],
+    u: ['3', '4']
 };
 
 const invisichars = [
@@ -82,20 +83,7 @@ function regexFromWord(word) {
     );
 }
 
-bot.on('message', (msg) => {
-    if (msg.author.id === bot.user.id) return;
-
-    if (msg.content.startsWith(config.prefix)) {
-        // It's a command
-        let content = msg.content.substr(config.prefix.length);
-        let command = content.split(' ')[0];
-        let args = content.split(' ').splice(1);
-        if (commands[command]) {
-            commands[command].run(bot, msg, args);
-            return;
-        }
-    }
-
+function handle(msg) {
     var changed = false;
 
     var content = msg.content;
@@ -119,7 +107,28 @@ bot.on('message', (msg) => {
 
     msg.delete();
     msg.channel.sendMessage(`${msg.author.username}: ${content}`);
+}
 
+bot.on('message', (msg) => {
+    if (msg.author.id === bot.user.id) return;
+
+    if (msg.content.startsWith(config.prefix)) {
+        // It's a command
+        let content = msg.content.substr(config.prefix.length);
+        let command = content.split(' ')[0];
+        let args = content.split(' ').splice(1);
+        if (commands[command]) {
+            commands[command].run(bot, msg, args);
+            return;
+        }
+    }
+
+    handle(msg);
+});
+
+bot.on('messageUpdate', (old, msg) => {
+    if (msg.author.id === bot.user.id) return;
+    handle(msg);
 });
 
 exports = bot;
